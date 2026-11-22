@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark dark-theme">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MQ Downloader</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Cairo', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            tg: {
+              bg: 'var(--app-bg)',
+              card: 'var(--app-card)',
+              input: 'var(--app-input)',
+              border: 'var(--app-border)',
+              text: 'var(--app-text)',
+              hint: 'var(--app-hint)',
+              btn: 'var(--app-btn)',
+              btnText: 'var(--app-btn-text)',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root, html.dark-theme {
+      --app-bg: #090e1a;
+      --app-card: #131c2e;
+      --app-input: #0b1220;
+      --app-border: rgba(148, 163, 184, 0.18);
+      --app-text: #f8fafc;
+      --app-hint: #94a3b8;
+      --app-btn: #2aabee;
+      --app-btn-text: #ffffff;
+    }
+
+    html.light-theme {
+      --app-bg: #f1f5f9;
+      --app-card: #ffffff;
+      --app-input: #f8fafc;
+      --app-border: rgba(15, 23, 42, 0.12);
+      --app-text: #0f172a;
+      --app-hint: #64748b;
+      --app-btn: #0284c7;
+      --app-btn-text: #ffffff;
+    }
+
+    body {
+      font-family: 'Cairo', system-ui, sans-serif;
+      background-color: var(--app-bg);
+      color: var(--app-text);
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-tg-bg text-tg-text antialiased overflow-x-hidden">
+  <div class="mx-auto w-full max-w-[480px] min-h-screen bg-tg-bg flex flex-col relative">
+
+    <!-- إشعارات عائمة -->
+    <div id="toastContainer" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[430px] pointer-events-none flex flex-col gap-2"></div>
+
+    <!-- الترويسة -->
+    <header class="sticky top-0 z-30 backdrop-blur-xl bg-tg-bg/90 border-b border-tg-border px-4 py-3">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shrink-0">
+            <span class="text-white font-extrabold text-sm" dir="ltr">MQ</span>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <h1 class="text-sm font-extrabold tracking-tight whitespace-nowrap" dir="ltr">MQ downloader</h1>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-400/25">PRO</span>
+            </div>
+            <p id="userGreeting" class="text-[11px] text-tg-hint truncate">أهلاً بك في MQ downloader 👋</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <span class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 whitespace-nowrap">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            مجاني • أعلى جودة
+          </span>
+
+          <button
+            type="button"
+            onclick="toggleTheme()"
+            aria-label="تبديل المظهر"
+            class="w-8 h-8 rounded-xl border border-tg-border bg-tg-card flex items-center justify-center text-tg-text active:scale-95"
+          >
+            <span id="themeIcon" class="text-xs">☀️</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-1 px-4 pt-4 pb-24 space-y-4">
+
+      <!-- تبويب التحميل -->
+      <section id="tab-download" class="space-y-4">
+        <div class="rounded-2xl bg-gradient-to-l from-sky-500/15 via-indigo-500/10 to-tg-card border border-sky-500/20 p-3.5 flex items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xs font-extrabold">مرحباً بك في <span dir="ltr" class="text-sky-400">MQ downloader</span></h2>
+            <p class="text-[11px] text-tg-hint mt-0.5">حمّل وجمّل مقاطع X وأضواء السناب وتيك توك بأعلى جودة مجاناً.</p>
+          </div>
+        </div>
+
+        <!-- إدخال الرابط -->
+        <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <label for="videoUrlInput" class="text-sm font-bold flex items-center gap-2">
+              <span class="w-1.5 h-4 rounded-full bg-tg-btn inline-block"></span>
+              رابط المقطع
+            </label>
+            <span id="detectedPlatformLabel" class="text-[11px] font-semibold text-tg-hint">بانتظار لصق الرابط...</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <input
+                id="videoUrlInput"
+                type="text"
+                inputmode="url"
+                dir="ltr"
+                autocomplete="off"
+                placeholder="https://x.com/... أو رابط أضواء السناب"
+                class="w-full rounded-xl bg-tg-input border border-tg-border px-3.5 py-3 pl-9 text-sm text-tg-text placeholder:text-tg-hint/70 placeholder:text-right focus:outline-none focus:ring-2 focus:ring-sky-500/60"
+              />
+              <button
+                id="clearUrlBtn"
+                type="button"
+                onclick="clearUrl()"
+                class="hidden absolute left-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-tg-border text-tg-hint text-xs flex items-center justify-center"
+              >✕</button>
+            </div>
+
+            <button
+              type="button"
+              onclick="pasteFromClipboard()"
+              class="shrink-0 h-[46px] px-3.5 rounded-xl bg-tg-btn/15 text-sky-400 border border-sky-500/25 font-bold text-xs active:scale-95"
+            >لصق</button>
+          </div>
+
+          <!-- شارات المنصات -->
+          <div id="platformBadges" class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
+            <div data-platform="x" class="platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-input text-tg-hint text-xs font-semibold">منصة X</div>
+            <div data-platform="snapchat" class="platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-input text-tg-hint text-xs font-semibold">أضواء السناب</div>
+            <div data-platform="tiktok" class="platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-input text-tg-hint text-xs font-semibold">تيك توك</div>
+            <div data-platform="instagram" class="platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-input text-tg-hint text-xs font-semibold">إنستغرام</div>
+            <div data-platform="youtube" class="platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-input text-tg-hint text-xs font-semibold">يوتيوب</div>
+          </div>
+        </div>
+
+        <!-- خيارات الجودة -->
+        <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3">
+          <h2 class="text-sm font-bold flex items-center gap-2">
+            <span class="w-1.5 h-4 rounded-full bg-indigo-400 inline-block"></span>
+            خيارات المعالجة والجودة
+          </h2>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <button type="button" data-format="1080p" onclick="selectFormat('1080p')" class="format-card text-right p-3.5 rounded-xl border-2 border-sky-500 bg-sky-500/10">
+              <div class="text-xs font-bold">أعلى جودة أصلية</div>
+              <div class="text-[11px] text-tg-hint mt-0.5">4K / 1080p HD</div>
+            </button>
+
+            <button type="button" data-format="vertical_9_16" onclick="selectFormat('vertical_9_16')" class="format-card text-right p-3.5 rounded-xl border border-tg-border bg-tg-input">
+              <div class="text-xs font-bold">تجميل وتحويل طولي</div>
+              <div class="text-[11px] text-tg-hint mt-0.5">9:16 للسناب والريلز</div>
+            </button>
+
+            <button type="button" data-format="compress" onclick="selectFormat('compress')" class="format-card text-right p-3.5 rounded-xl border border-tg-border bg-tg-input">
+              <div class="text-xs font-bold">ضغط الحجم</div>
+              <div class="text-[11px] text-tg-hint mt-0.5">مناسب للواتساب وتليجرام</div>
+            </button>
+
+            <button type="button" data-format="mp3" onclick="selectFormat('mp3')" class="format-card text-right p-3.5 rounded-xl border border-tg-border bg-tg-input">
+              <div class="text-xs font-bold">استخراج الصوت فقط</div>
+              <div class="text-[11px] text-tg-hint mt-0.5">ملف MP3 نقي</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- تحسينات إضافية مجانية بالكامل -->
+        <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-2.5">
+          <h2 class="text-sm font-bold flex items-center gap-2">
+            <span class="w-1.5 h-4 rounded-full bg-emerald-400 inline-block"></span>
+            تحسينات إضافية (مفتوحة للجميع)
+          </h2>
+
+          <div class="divide-y divide-tg-border">
+            <label class="flex items-center justify-between gap-3 py-2.5 cursor-pointer">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold">إزالة العلامة المائية</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">مجاني</span>
+                </div>
+                <p class="text-[11px] text-tg-hint mt-0.5">حفظ الفيديو نظيفاً بدون شعارات</p>
+              </div>
+              <input id="optRemoveWatermark" type="checkbox" checked class="sr-only peer" />
+              <div class="relative w-11 h-6 bg-slate-600/50 rounded-full peer peer-checked:bg-sky-500 transition-colors shrink-0 after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:-translate-x-5"></div>
+            </label>
+
+            <label class="flex items-center justify-between gap-3 pt-2.5 cursor-pointer">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold">ترجمة تلقائية بالذكاء الاصطناعي</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-bold">مجاني</span>
+                </div>
+                <p class="text-[11px] text-tg-hint mt-0.5">تفريغ الصوت ودمج ترجمة عربية متزامنة</p>
+              </div>
+              <input id="optAiCaptions" type="checkbox" class="sr-only peer" />
+              <div class="relative w-11 h-6 bg-slate-600/50 rounded-full peer peer-checked:bg-emerald-500 transition-colors shrink-0 after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:-translate-x-5"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- زر التنفيذ -->
+        <button
+          id="submitBtn"
+          type="button"
+          onclick="startProcessing()"
+          class="w-full py-4 px-5 rounded-2xl bg-gradient-to-l from-sky-500 via-blue-500 to-indigo-600 text-white font-extrabold text-sm shadow-lg active:scale-[0.98]"
+        >
+          <span id="submitBtnText">بدء المعالجة والتحميل</span>
+        </button>
+
+        <!-- لوحة النتيجة -->
+        <div id="processingPanel" class="hidden rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span id="statusTitle" class="text-sm font-bold">جاري المعالجة...</span>
+            <span id="progressPercent" class="text-xs font-extrabold text-sky-400">0%</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-tg-input overflow-hidden">
+            <div id="progressBar" class="h-full bg-sky-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <div id="resultSummaryBox" class="hidden rounded-xl bg-emerald-500/10 border border-emerald-500/25 p-3 text-xs">
+            <p class="font-bold text-emerald-400">تم إرسال الطلب إلى بوت MQ downloader بنجاح ✓</p>
+            <p id="resultMessageDesc" class="text-tg-hint mt-1"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- تبويب السجل -->
+      <section id="tab-history" class="hidden space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-extrabold">سجل المعالجات</h2>
+          <button id="clearHistoryBtn" type="button" onclick="clearHistory()" class="hidden px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-400 text-xs font-bold">مسح السجل</button>
+        </div>
+        <div id="historyList" class="space-y-3"></div>
+        <div id="historyEmptyState" class="rounded-2xl bg-tg-card border border-tg-border p-8 text-center text-xs text-tg-hint">
+          السجل فارغ حالياً.
+        </div>
+      </section>
+
+      <!-- تبويب الاستضافة -->
+      <section id="tab-hosting" class="hidden space-y-4">
+        <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3">
+          <h2 class="text-sm font-bold">فحص رابط الاستضافة لـ <span dir="ltr">@BotFather</span></h2>
+          <div class="flex items-center gap-2">
+            <input
+              id="hostingUrlVerifyInput"
+              type="text"
+              dir="ltr"
+              placeholder="https://your-project.pages.dev"
+              oninput="verifyMiniAppUrl()"
+              class="flex-1 rounded-xl bg-tg-input border border-tg-border px-3 py-2.5 text-xs text-tg-text"
+            />
+            <button type="button" onclick="verifyMiniAppUrl()" class="px-3.5 py-2.5 rounded-xl bg-emerald-500/15 text-emerald-400 font-bold text-xs">فحص</button>
+          </div>
+          <div id="urlVerifyResult" class="hidden rounded-xl p-3 text-xs border"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- شريط التنقل السفلي -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-30 backdrop-blur-xl bg-tg-bg/95 border-t border-tg-border px-2 py-2.5">
+      <div class="grid grid-cols-3 gap-1">
+        <button type="button" data-nav="download" onclick="switchTab('download')" class="nav-btn py-2 rounded-xl text-sky-400 bg-sky-500/10 text-xs font-bold">التحميل</button>
+        <button type="button" data-nav="history" onclick="switchTab('history')" class="nav-btn relative py-2 rounded-xl text-tg-hint text-xs font-bold">
+          السجل <span id="historyBadgeCount" class="hidden mr-1 px-1.5 py-0.2 rounded-full bg-sky-500 text-white text-[10px]">0</span>
+        </button>
+        <button type="button" data-nav="hosting" onclick="switchTab('hosting')" class="nav-btn py-2 rounded-xl text-tg-hint text-xs font-bold">الاستضافة</button>
+      </div>
+    </nav>
+  </div>
+
+  <script>
+    const CONFIG = {
+      APP_NAME: "MQ downloader",
+      BACKEND_API_URL: "",
+      STORAGE_KEYS: {
+        HISTORY: "mq_downloader_history_v2",
+        THEME: "mq_downloader_theme_v2",
+      },
+      FORMATS: {
+        "1080p": "أعلى جودة أصلية (4K / 1080p)",
+        vertical_9_16: "تجميل وتحويل طولي (9:16)",
+        compress: "ضغط الحجم",
+        mp3: "استخراج الصوت (MP3)",
+      },
+    };
+
+    const PLATFORMS = {
+      x: { name: "منصة X", regex: /(https?:\/\/)?(www\.)?(x\.com|twitter\.com|t\.co)\//i },
+      snapchat: { name: "أضواء السناب", regex: /(https?:\/\/)?(www\.|t\.)?(snapchat\.com|snap\.com)\//i },
+      tiktok: { name: "تيك توك", regex: /(https?:\/\/)?(www\.|vm\.|vt\.)?tiktok\.com\//i },
+      instagram: { name: "إنستغرام", regex: /(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\//i },
+      youtube: { name: "يوتيوب", regex: /(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\//i },
+    };
+
+    const state = {
+      tg: null,
+      inTelegram: false,
+      activeTab: "download",
+      selectedFormat: "1080p",
+      detectedPlatform: null,
+      isProcessing: false,
+      isDark: true,
+    };
+
+    function initApp() {
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        state.tg = tg;
+        state.inTelegram = Boolean(tg.initData || tg.initDataUnsafe?.user);
+        try {
+          tg.ready();
+          tg.expand();
+        } catch (_) {}
+
+        const firstName = tg.initDataUnsafe?.user?.first_name;
+        if (firstName) {
+          document.getElementById("userGreeting").textContent = `أهلاً ${firstName} في MQ downloader 👋`;
+        }
+      }
+
+      const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+      setTheme(savedTheme !== "light", false);
+      updateHistoryBadge(getHistory().length);
+
+      document.getElementById("videoUrlInput").addEventListener("input", (e) => {
+        detectPlatformFromUrl(e.target.value.trim());
+      });
+    }
+
+    function toggleTheme() {
+      setTheme(!state.isDark, true);
+    }
+
+    function setTheme(dark, persist) {
+      state.isDark = Boolean(dark);
+      const html = document.documentElement;
+      html.classList.toggle("dark", state.isDark);
+      html.classList.toggle("dark-theme", state.isDark);
+      html.classList.toggle("light-theme", !state.isDark);
+      document.getElementById("themeIcon").textContent = state.isDark ? "☀️" : "🌙";
+      if (persist) localStorage.setItem(CONFIG.STORAGE_KEYS.THEME, state.isDark ? "dark" : "light");
+    }
+
+    function switchTab(tabName) {
+      state.activeTab = tabName;
+      ["download", "history", "hosting"].forEach((t) => {
+        document.getElementById(`tab-${t}`).classList.toggle("hidden", t !== tabName);
+      });
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        const active = btn.dataset.nav === tabName;
+        btn.className = active
+          ? "nav-btn relative py-2 rounded-xl text-sky-400 bg-sky-500/10 text-xs font-bold"
+          : "nav-btn relative py-2 rounded-xl text-tg-hint text-xs font-bold";
+      });
+      if (tabName === "history") renderHistory();
+    }
+
+    function normalizeUrlInput(raw) {
+      const trimmed = (raw || "").trim();
+      if (!trimmed) return "";
+      if (/^https?:\/\//i.test(trimmed)) return trimmed;
+      if (/^[a-z0-9-]+(\.[a-z0-9-]+)+/i.test(trimmed)) return "https://" + trimmed;
+      return trimmed;
+    }
+
+    function detectPlatformFromUrl(url) {
+      document.getElementById("clearUrlBtn").classList.toggle("hidden", !url);
+      let matched = null;
+      for (const [key, info] of Object.entries(PLATFORMS)) {
+        if (info.regex.test(url)) {
+          matched = key;
+          break;
+        }
+      }
+      state.detectedPlatform = matched;
+
+      document.querySelectorAll(".platform-badge").forEach((b) => {
+        const isMatch = b.dataset.platform === matched;
+        b.className = isMatch
+          ? "platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-sky-400 bg-sky-500/15 text-sky-400 text-xs font-bold"
+          : "platform-badge shrink-0 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-input text-tg-hint text-xs font-semibold";
+      });
+
+      const label = document.getElementById("detectedPlatformLabel");
+      if (!url) label.textContent = "بانتظار لصق الرابط...";
+      else if (matched) label.textContent = `تم التعرف: ${PLATFORMS[matched].name} ✓`;
+      else label.textContent = "رابط عام";
+    }
+
+    async function pasteFromClipboard() {
+      const input = document.getElementById("videoUrlInput");
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && text.trim()) {
+          input.value = text.trim();
+          detectPlatformFromUrl(input.value);
+          showToast("تم لصق الرابط", "success");
+          return;
+        }
+      } catch (_) {}
+      input.focus();
+      showToast("اضغط مطولاً داخل خانة الرابط ثم اختر لصق", "info");
+    }
+
+    function clearUrl() {
+      const input = document.getElementById("videoUrlInput");
+      input.value = "";
+      detectPlatformFromUrl("");
+    }
+
+    function selectFormat(formatKey) {
+      state.selectedFormat = formatKey;
+      document.querySelectorAll(".format-card").forEach((card) => {
+        const selected = card.dataset.format === formatKey;
+        card.className = selected
+          ? "format-card text-right p-3.5 rounded-xl border-2 border-sky-500 bg-sky-500/10"
+          : "format-card text-right p-3.5 rounded-xl border border-tg-border bg-tg-input";
+      });
+    }
+
+    async function startProcessing() {
+      if (state.isProcessing) return;
+      const input = document.getElementById("videoUrlInput");
+      const url = normalizeUrlInput(input.value);
+
+      if (!/^https?:\/\/[a-z0-9-]+(\.[a-z0-9-]+)+/i.test(url)) {
+        showToast("يرجى إدخال رابط صحيح يبدأ بـ https://", "error");
+        input.focus();
+        return;
+      }
+
+      input.value = url;
+      detectPlatformFromUrl(url);
+      state.isProcessing = true;
+      document.getElementById("submitBtn").disabled = true;
+
+      const panel = document.getElementById("processingPanel");
+      const resultBox = document.getElementById("resultSummaryBox");
+      panel.classList.remove("hidden");
+      resultBox.classList.add("hidden");
+
+      for (const pct of [30, 70, 100]) {
+        document.getElementById("progressBar").style.width = `${pct}%`;
+        document.getElementById("progressPercent").textContent = `${pct}%`;
+        await new Promise((r) => setTimeout(r, 250));
+      }
+
+      const payload = {
+        action: "download_video",
+        app: CONFIG.APP_NAME,
+        url,
+        platform: state.detectedPlatform || "other",
+        format: state.selectedFormat,
+        options: {
+          removeWatermark: document.getElementById("optRemoveWatermark").checked,
+          aiCaptions: document.getElementById("optAiCaptions").checked,
+        },
+        timestamp: new Date().toISOString(),
+      };
+
+      let msg = "تم حفظ الطلب في السجل.";
+      if (state.inTelegram && typeof state.tg?.sendData === "function") {
+        try {
+          state.tg.sendData(JSON.stringify(payload));
+          msg = "تم إرسال الطلب إلى البوت في المحادثة.";
+        } catch (_) {}
+      }
+
+      saveToHistory(payload);
+      document.getElementById("statusTitle").textContent = "اكتمل تجهيز الطلب ✓";
+      document.getElementById("resultMessageDesc").textContent = msg;
+      resultBox.classList.remove("hidden");
+      state.isProcessing = false;
+      document.getElementById("submitBtn").disabled = false;
+      showToast("تم تجهيز الطلب بنجاح", "success");
+    }
+
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.HISTORY) || "[]");
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function saveToHistory(payload) {
+      const updated = [{ id: Date.now().toString(), ...payload }, ...getHistory()].slice(0, 25);
+      localStorage.setItem(CONFIG.STORAGE_KEYS.HISTORY, JSON.stringify(updated));
+      updateHistoryBadge(updated.length);
+    }
+
+    function updateHistoryBadge(count) {
+      const badge = document.getElementById("historyBadgeCount");
+      badge.textContent = count;
+      badge.classList.toggle("hidden", count === 0);
+    }
+
+    function renderHistory() {
+      const list = getHistory();
+      const container = document.getElementById("historyList");
+      const empty = document.getElementById("historyEmptyState");
+      const clearBtn = document.getElementById("clearHistoryBtn");
+
+      if (!list.length) {
+        container.innerHTML = "";
+        empty.classList.remove("hidden");
+        clearBtn.classList.add("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      clearBtn.classList.remove("hidden");
+      container.innerHTML = list.map((item) => `
+        <div class="rounded-2xl bg-tg-card border border-tg-border p-3.5 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-sky-400">${escapeHtml(PLATFORMS[item.platform]?.name || "رابط عام")}</span>
+            <span class="text-tg-hint">${escapeHtml(CONFIG.FORMATS[item.format] || item.format)}</span>
+          </div>
+          <p dir="ltr" class="text-xs truncate bg-tg-input px-2.5 py-1.5 rounded-lg border border-tg-border">${escapeHtml(item.url)}</p>
+        </div>
+      `).join("");
+    }
+
+    function clearHistory() {
+      localStorage.removeItem(CONFIG.STORAGE_KEYS.HISTORY);
+      updateHistoryBadge(0);
+      renderHistory();
+      showToast("تم مسح السجل", "info");
+    }
+
+    function verifyMiniAppUrl() {
+      const val = normalizeUrlInput(document.getElementById("hostingUrlVerifyInput").value);
+      const box = document.getElementById("urlVerifyResult");
+      if (!val) { box.classList.add("hidden"); return; }
+      box.classList.remove("hidden");
+      try {
+        const u = new URL(val);
+        if (u.protocol === "https:") {
+          box.className = "rounded-xl p-3 text-xs border bg-emerald-500/10 border-emerald-500/30 text-emerald-300";
+          box.textContent = "✓ الرابط صالح لـ @BotFather (HTTPS)";
+        } else {
+          box.className = "rounded-xl p-3 text-xs border bg-amber-500/10 border-amber-500/30 text-amber-300";
+          box.textContent = "يجب أن يبدأ الرابط بـ https://";
+        }
+      } catch (_) {
+        box.className = "rounded-xl p-3 text-xs border bg-rose-500/10 border-rose-500/30 text-rose-300";
+        box.textContent = "صيغة الرابط غير صحيحة";
+      }
+    }
+
+    function showToast(message, type) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      const bg = type === "error" ? "bg-rose-950 border-rose-500/40 text-rose-200" : "bg-slate-900 border-sky-500/40 text-sky-100";
+      toast.className = `rounded-xl border px-4 py-2.5 text-xs font-bold shadow-lg ${bg}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    document.addEventListener("DOMContentLoaded", initApp);
+  </script>
+</body>
+</html>
