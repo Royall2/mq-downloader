@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark dark-theme">
+<html lang="ar" dir="rtl" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -43,6 +43,7 @@
   </script>
 
   <style>
+    /* التكيف التلقائي مع متغيرات ثيم تليجرام مع وضع داكن عصري افتراضي للمتصفحات العادية */
     :root {
       --app-bg: var(--tg-theme-bg-color, #090e1a);
       --app-secondary-bg: var(--tg-theme-secondary-bg-color, #111827);
@@ -54,6 +55,7 @@
       --app-btn-text: var(--tg-theme-button-text-color, #ffffff);
     }
 
+    /* التبديل اليدوي للوضع الفاتح */
     html.light-theme {
       --app-bg: #f1f5f9;
       --app-secondary-bg: #e2e8f0;
@@ -65,6 +67,7 @@
       --app-btn-text: #ffffff;
     }
 
+    /* التبديل اليدوي للوضع الداكن */
     html.dark-theme {
       --app-bg: #090e1a;
       --app-secondary-bg: #111827;
@@ -84,6 +87,7 @@
       overscroll-behavior-y: none;
     }
 
+    /* حركة انتقال سلسة عند التبديل بين التبويبات */
     .tab-panel {
       animation: fadeSlideUp 0.24s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -99,6 +103,7 @@
       }
     }
 
+    /* إخفاء شريط التمرير الأفقي في شريط المنصات */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -111,14 +116,18 @@
 
 <body class="min-h-screen bg-tg-bg text-tg-text antialiased selection:bg-sky-500/30 overflow-x-hidden">
 
+  <!-- الحاوية الرئيسية المصممة للجوال أولاً مع إطار أنيق على الشاشات الكبيرة -->
   <div id="appShell" class="mx-auto w-full max-w-[480px] min-h-screen sm:min-h-[calc(100vh-2rem)] sm:my-4 sm:rounded-[30px] sm:border sm:border-tg-border sm:shadow-2xl bg-tg-bg flex flex-col relative overflow-hidden">
 
-    <!-- حاوية الإشعارات العائمة -->
+    <!-- حاوية الإشعارات العائمة (بديل آمن وأنيق لـ alert) -->
     <div id="toastContainer" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[430px] pointer-events-none flex flex-col gap-2"></div>
 
-    <!-- الترويسة العلوية -->
+    <!-- ========================================================= -->
+    <!-- الترويسة العلوية (Header)                                 -->
+    <!-- ========================================================= -->
     <header class="sticky top-0 z-30 backdrop-blur-xl bg-tg-bg/85 border-b border-tg-border px-4 py-3.5">
       <div class="flex items-center justify-between gap-2">
+        <!-- شعار وعنوان MQ downloader -->
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/25 shrink-0">
             <span class="text-white font-extrabold text-sm tracking-tight" dir="ltr">MQ</span>
@@ -132,16 +141,17 @@
           </div>
         </div>
 
+        <!-- مؤشر حالة الباقة + زر تبديل الوضع الداكن/الفاتح -->
         <div class="flex items-center gap-2 shrink-0">
           <button
             id="quotaPill"
             type="button"
             onclick="switchTab('vip')"
             class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-bold border border-tg-border bg-tg-card hover:opacity-90 transition active:scale-95"
-            title="الحصة اليومية المجانية"
+            title="حالة الباقة"
           >
             <span id="quotaDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span id="quotaText">5/5 مجاني اليوم</span>
+            <span id="quotaText">مجاني بدون حد</span>
           </button>
 
           <button
@@ -163,12 +173,17 @@
       </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
+    <!-- ========================================================= -->
+    <!-- المحتوى الرئيسي للتبويبات                                 -->
+    <!-- ========================================================= -->
     <main class="flex-1 overflow-y-auto px-4 pt-4 pb-28 space-y-4">
 
-      <!-- التبويب 1: التحميل -->
+      <!-- ======================================================= -->
+      <!-- التبويب 1: التحميل (Download & Enhance)                 -->
+      <!-- ======================================================= -->
       <section id="tab-download" class="tab-panel space-y-4">
 
+        <!-- شريط ترحيبي مصغر -->
         <div class="rounded-2xl bg-gradient-to-l from-sky-500/15 via-indigo-500/10 to-tg-card border border-sky-500/20 p-3.5 flex items-center justify-between gap-3">
           <div class="min-w-0">
             <h2 class="text-xs font-extrabold text-tg-text">مرحباً بك في <span dir="ltr" class="text-sky-400">MQ downloader</span></h2>
@@ -183,7 +198,7 @@
           </div>
         </div>
 
-        <!-- إدخال الرابط والتعرّف التلقائي -->
+        <!-- بطاقة إدخال الرابط والتعرّف التلقائي على المنصات -->
         <div class="rounded-2xl bg-tg-card border border-tg-border p-4 shadow-sm space-y-3">
           <div class="flex items-center justify-between gap-2">
             <label for="videoUrlInput" class="text-sm font-bold flex items-center gap-2">
@@ -193,12 +208,12 @@
             <span id="detectedPlatformLabel" class="text-[11px] font-semibold text-tg-hint">بانتظار لصق الرابط...</span>
           </div>
 
+          <!-- حقل الرابط + زر لصق + زر مسح -->
           <div class="relative flex items-center gap-2">
             <div class="relative flex-1">
               <input
                 id="videoUrlInput"
-                type="text"
-                inputmode="url"
+                type="url"
                 dir="ltr"
                 autocomplete="off"
                 placeholder="https://x.com/... أو رابط أضواء السناب"
@@ -231,26 +246,54 @@
             </button>
           </div>
 
+          <!-- شارات التعرف الديناميكي على المنصات المدعومة -->
           <div class="pt-1">
             <div id="platformBadges" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+              <!-- منصة X -->
               <div data-platform="x" class="platform-badge shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-bg/60 text-tg-hint text-xs font-semibold transition-all duration-200">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
                 <span>منصة X</span>
               </div>
+
+              <!-- أضواء السناب -->
               <div data-platform="snapchat" class="platform-badge shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-bg/60 text-tg-hint text-xs font-semibold transition-all duration-200">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.2 2c-3.3 0-5.8 2.4-5.9 5.7 0 .8.1 1.7.2 2.4-.3.1-.7 0-1-.1-.4-.1-.8.1-.9.4-.1.4.1.8.5 1 .5.2 1.1.4 1.3.8-.3 1.4-1.3 2.7-2.8 3.2-.4.1-.6.5-.5.9.1.3.4.6.8.6.7.1 1.3.2 1.6.6.2.3.2.7.5 1 .4.4 1.1.3 1.8.2.8-.1 1.6-.2 2.5.4.6.4 1.2.9 2.1.9s1.5-.5 2.1-.9c.9-.6 1.7-.5 2.5-.4.7.1 1.4.2 1.8-.2.3-.3.3-.7.5-1 .3-.4.9-.5 1.6-.6.4 0 .7-.3.8-.6.1-.4-.1-.8-.5-.9-1.5-.5-2.5-1.8-2.8-3.2.2-.4.8-.6 1.3-.8.4-.2.6-.6.5-1-.1-.3-.5-.5-.9-.4-.3.1-.7.2-1 .1.1-.7.2-1.6.2-2.4-.1-3.3-2.6-5.7-5.9-5.7z"/>
+                </svg>
                 <span>أضواء السناب</span>
               </div>
+
+              <!-- تيك توك -->
               <div data-platform="tiktok" class="platform-badge shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-bg/60 text-tg-hint text-xs font-semibold transition-all duration-200">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
                 <span>تيك توك</span>
               </div>
+
+              <!-- إنستغرام -->
               <div data-platform="instagram" class="platform-badge shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-bg/60 text-tg-hint text-xs font-semibold transition-all duration-200">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
                 <span>إنستغرام</span>
               </div>
+
+              <!-- يوتيوب -->
               <div data-platform="youtube" class="platform-badge shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-tg-border bg-tg-bg/60 text-tg-hint text-xs font-semibold transition-all duration-200">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
+                </svg>
                 <span>يوتيوب</span>
               </div>
             </div>
           </div>
 
+          <!-- روابط تجريبية سريعة لاختبار الكشف الفوري -->
           <div class="flex items-center flex-wrap gap-1.5 pt-2 border-t border-tg-border/70">
             <span class="text-[11px] text-tg-hint ml-1">اختبار سريع:</span>
             <button type="button" onclick="fillSampleLink('x')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-tg-bg/80 border border-tg-border hover:border-sky-500/50 transition active:scale-95">منصة X</button>
@@ -260,57 +303,115 @@
           </div>
         </div>
 
-        <!-- خيارات المعالجة والجودة -->
+        <!-- خيارات المعالجة والجودة (بطاقات تفاعلية) -->
         <div class="rounded-2xl bg-tg-card border border-tg-border p-4 shadow-sm space-y-3">
-          <h2 class="text-sm font-bold flex items-center gap-2">
-            <span class="w-1.5 h-4 rounded-full bg-indigo-400 inline-block"></span>
-            خيارات المعالجة والجودة
-          </h2>
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-sm font-bold flex items-center gap-2">
+              <span class="w-1.5 h-4 rounded-full bg-indigo-400 inline-block"></span>
+              خيارات المعالجة والجودة
+            </h2>
+            <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">مجاني حتى 7 دقائق</span>
+          </div>
 
           <div class="grid grid-cols-2 gap-2.5" id="formatCards">
+            <!-- 1. جودة قياسية مجانية (افتراضي للجميع) -->
             <button
               type="button"
-              data-format="1080p"
-              onclick="selectFormat('1080p')"
+              data-format="standard"
+              onclick="selectFormat('standard')"
               class="format-card flex flex-col items-start text-right p-3.5 rounded-xl border-2 border-sky-500 bg-sky-500/10 transition active:scale-[0.98]"
             >
-              <span class="text-xs font-bold leading-snug">جودة عالية</span>
-              <span class="text-[11px] text-tg-hint mt-0.5">1080p HD أصلية</span>
+              <div class="w-full flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 font-bold">مجاني</span>
+              </div>
+              <span class="text-xs font-bold leading-snug">جودة قياسية 720p</span>
+              <span class="text-[11px] text-tg-hint mt-0.5">مفتوح للجميع • حتى 7 دقائق</span>
             </button>
 
+            <!-- 2. دقة عالية فائقة 1080p / 4K وصور عالية الدقة (VIP) -->
+            <button
+              type="button"
+              data-format="high_res_vip"
+              onclick="selectFormat('high_res_vip')"
+              class="format-card flex flex-col items-start text-right p-3.5 rounded-xl border border-tg-border bg-tg-bg/50 transition active:scale-[0.98]"
+            >
+              <div class="w-full flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="M7 15V9M7 12h3M10 9v6M14 9h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2V9z"></path>
+                  </svg>
+                </div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 border border-amber-400/30 font-extrabold">VIP ⭐</span>
+              </div>
+              <span class="text-xs font-bold leading-snug">دقة عالية 1080p/4K</span>
+              <span class="text-[11px] text-tg-hint mt-0.5">مقاطع وصور عالية الدقة + +7د</span>
+            </button>
+
+            <!-- 3. تجميل وتحويل طولي 9:16 -->
             <button
               type="button"
               data-format="vertical_9_16"
               onclick="selectFormat('vertical_9_16')"
               class="format-card flex flex-col items-start text-right p-3.5 rounded-xl border border-tg-border bg-tg-bg/50 transition active:scale-[0.98]"
             >
+              <div class="w-full flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="6" y="2" width="12" height="20" rx="2"></rect>
+                    <path d="M12 18h.01"></path>
+                  </svg>
+                </div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 font-bold">مجاني</span>
+              </div>
               <span class="text-xs font-bold leading-snug">تجميل وتحويل طولي</span>
               <span class="text-[11px] text-tg-hint mt-0.5">9:16 للسناب والريلز</span>
             </button>
 
-            <button
-              type="button"
-              data-format="compress"
-              onclick="selectFormat('compress')"
-              class="format-card flex flex-col items-start text-right p-3.5 rounded-xl border border-tg-border bg-tg-bg/50 transition active:scale-[0.98]"
-            >
-              <span class="text-xs font-bold leading-snug">ضغط الحجم</span>
-              <span class="text-[11px] text-tg-hint mt-0.5">مناسب للواتساب وتليجرام</span>
-            </button>
-
+            <!-- 4. استخراج الصوت فقط MP3 -->
             <button
               type="button"
               data-format="mp3"
               onclick="selectFormat('mp3')"
               class="format-card flex flex-col items-start text-right p-3.5 rounded-xl border border-tg-border bg-tg-bg/50 transition active:scale-[0.98]"
             >
+              <div class="w-full flex items-center justify-between mb-2.5">
+                <div class="w-9 h-9 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                  </svg>
+                </div>
+                <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 font-bold">مجاني</span>
+              </div>
               <span class="text-xs font-bold leading-snug">استخراج الصوت فقط</span>
               <span class="text-[11px] text-tg-hint mt-0.5">ملف MP3 نقي</span>
             </button>
           </div>
+
+          <!-- خيار المقاطع الطويلة +7 دقائق (VIP) -->
+          <div class="pt-1 border-t border-tg-border/70">
+            <label class="flex items-center justify-between gap-3 pt-2 cursor-pointer select-none">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold">السماح بالمقاطع الأطول من 7 دقائق</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 border border-amber-400/30 font-bold">VIP ⭐</span>
+                </div>
+                <p class="text-[11px] text-tg-hint mt-0.5">المجاني يدعم المقاطع حتى 7 دقائق; الاشتراك يفتح أي مدة</p>
+              </div>
+              <input id="optLongVideo" type="checkbox" onchange="handleLongVideoVipToggle(this)" class="sr-only peer" />
+              <div class="relative w-11 h-6 bg-slate-600/50 rounded-full peer peer-checked:bg-amber-500 transition-colors shrink-0 after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:-translate-x-5 shadow-inner"></div>
+            </label>
+          </div>
         </div>
 
-        <!-- تحسينات إضافية -->
+        <!-- خيارات التحسين الإضافية -->
         <div class="rounded-2xl bg-tg-card border border-tg-border p-4 shadow-sm space-y-2.5">
           <div class="flex items-center justify-between">
             <h2 class="text-sm font-bold flex items-center gap-2">
@@ -321,6 +422,7 @@
           </div>
 
           <div class="divide-y divide-tg-border/70">
+            <!-- إزالة العلامة المائية -->
             <label class="flex items-center justify-between gap-3 py-2.5 cursor-pointer select-none">
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
@@ -333,6 +435,7 @@
               <div class="relative w-11 h-6 bg-slate-600/50 rounded-full peer peer-checked:bg-sky-500 transition-colors shrink-0 after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:-translate-x-5 shadow-inner"></div>
             </label>
 
+            <!-- إضافة ترجمة تلقائية بالذكاء الاصطناعي (VIP) -->
             <label class="flex items-center justify-between gap-3 pt-2.5 pb-1 cursor-pointer select-none">
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
@@ -347,17 +450,20 @@
           </div>
         </div>
 
-        <!-- زر التنفيذ الرئيسي -->
+        <!-- زر التنفيذ الرئيسي (CTA) -->
         <button
           id="submitBtn"
           type="button"
           onclick="startProcessing()"
           class="w-full py-4 px-5 rounded-2xl bg-gradient-to-l from-sky-500 via-blue-500 to-indigo-600 text-white font-extrabold text-sm shadow-lg shadow-sky-500/25 hover:brightness-110 transition active:scale-[0.98] flex items-center justify-center gap-2.5 disabled:opacity-60 disabled:cursor-not-allowed"
         >
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
           <span id="submitBtnText">بدء المعالجة والتحميل</span>
         </button>
 
-        <!-- لوحة حالة التقدم -->
+        <!-- لوحة حالة التقدم المتحركة والنتيجة -->
         <div id="processingPanel" class="hidden rounded-2xl bg-tg-card border border-tg-border p-4 shadow-sm space-y-3.5">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -373,10 +479,17 @@
 
           <div id="progressSteps" class="space-y-1.5 text-xs text-tg-hint"></div>
 
+          <!-- ملخص النتيجة وبيانات JSON المرسلة للبوت -->
           <div id="resultSummaryBox" class="hidden pt-2 border-t border-tg-border space-y-3">
-            <div class="rounded-xl bg-emerald-500/10 border border-emerald-500/25 p-3">
-              <p class="text-xs font-bold text-emerald-400">تم تجهيز الطلب عبر MQ downloader!</p>
-              <p id="resultMessageDesc" class="text-xs text-tg-hint mt-0.5">تم إرسال بيانات الطلب وحفظه في السجل المحلي.</p>
+            <div class="rounded-xl bg-emerald-500/10 border border-emerald-500/25 p-3 flex items-start gap-2.5">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <div class="text-xs leading-relaxed">
+                <p class="font-bold text-emerald-400">تم تجهيز الطلب عبر MQ downloader!</p>
+                <p id="resultMessageDesc" class="text-tg-hint mt-0.5">تم إرسال بيانات الطلب وحفظه في السجل المحلي.</p>
+              </div>
             </div>
 
             <details class="rounded-xl bg-tg-bg/80 border border-tg-border overflow-hidden">
@@ -398,7 +511,7 @@
           </div>
         </div>
 
-        <!-- بطاقة الوصول السريع للاستضافة -->
+        <!-- بطاقة الوصول السريع إلى مساعد الاستضافة المجانية ورفع GitHub -->
         <div class="rounded-2xl bg-gradient-to-l from-emerald-500/15 via-sky-500/10 to-tg-card border border-emerald-500/25 p-3.5 flex items-center justify-between gap-3">
           <div class="min-w-0">
             <div class="flex items-center gap-1.5">
@@ -415,9 +528,19 @@
             فتح المساعد
           </button>
         </div>
+
+        <!-- تذييل ومعلومة الجاهزية للاستضافة المجانية -->
+        <footer class="rounded-2xl bg-tg-card/60 border border-tg-border/80 p-3.5 text-center space-y-1">
+          <p class="text-xs font-bold text-tg-text" dir="ltr">MQ downloader • Telegram Mini App</p>
+          <p class="text-[11px] text-tg-hint leading-relaxed">
+            ملف HTML واحد متكامل وجاهز للرفع المجاني المباشر على <strong>GitHub Pages</strong> أو <strong>Netlify</strong> أو <strong>Vercel</strong>.
+          </p>
+        </footer>
       </section>
 
-      <!-- التبويب 2: السجل -->
+      <!-- ======================================================= -->
+      <!-- التبويب 2: السجل (History)                              -->
+      <!-- ======================================================= -->
       <section id="tab-history" class="tab-panel hidden space-y-4">
         <div class="flex items-center justify-between gap-2">
           <div>
@@ -436,7 +559,14 @@
 
         <div id="historyList" class="space-y-3"></div>
 
+        <!-- حالة السجل الفارغ -->
         <div id="historyEmptyState" class="rounded-2xl bg-tg-card border border-tg-border p-8 text-center space-y-3">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center">
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
           <h3 class="text-sm font-bold">السجل فارغ حالياً</h3>
           <p class="text-xs text-tg-hint max-w-[260px] mx-auto leading-relaxed">
             أي رابط تعالجه من منصة X أو أضواء السناب أو غيرها سيُحفظ هنا لسهولة إعادة استخدامه.
@@ -451,17 +581,22 @@
         </div>
       </section>
 
-      <!-- التبويب 3: VIP -->
+      <!-- ======================================================= -->
+      <!-- التبويب 3: باقة VIP (Telegram Stars ⭐)                 -->
+      <!-- ======================================================= -->
       <section id="tab-vip" class="tab-panel hidden space-y-4">
+
+        <!-- البطاقة التعريفية لباقة MQ downloader VIP -->
         <div class="relative overflow-hidden rounded-2xl border border-amber-400/35 bg-gradient-to-br from-amber-500/20 via-yellow-500/10 to-tg-card p-5 shadow-lg">
-          <div class="flex items-start justify-between gap-3">
+          <div class="absolute -left-6 -top-6 w-28 h-28 rounded-full bg-amber-400/20 blur-2xl pointer-events-none"></div>
+          <div class="relative flex items-start justify-between gap-3">
             <div>
               <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[11px] font-extrabold mb-2">
                 ⭐ نجوم تليجرام الرسمية
               </span>
               <h2 class="text-lg font-extrabold text-tg-text">باقة <span dir="ltr">MQ downloader VIP</span></h2>
               <p class="text-xs text-tg-hint mt-1 leading-relaxed">
-                تحميل غير محدود وجودة فائقة وترجمة ذكية بدون إعلانات أو قنوات إجبارية.
+                التحميل العادي مفتوح للجميع مجاناً؛ اشترك في VIP للحصول على المقاطع والصور بأعلى دقة والمقاطع الأطول من 7 دقائق.
               </p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/30 shrink-0 text-2xl">
@@ -469,13 +604,39 @@
             </div>
           </div>
 
+          <!-- شارة التفعيل التجريبي -->
           <div id="vipActiveBanner" class="hidden mt-4 rounded-xl bg-emerald-500/15 border border-emerald-400/30 px-3.5 py-2.5 flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-400">✓ باقة MQ downloader VIP مفعّلة</span>
             <button type="button" onclick="deactivateDemoVip()" class="text-[11px] text-tg-hint underline hover:text-tg-text">إلغاء التجربة</button>
           </div>
         </div>
 
+        <!-- مزايا الباقة -->
+        <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-2.5">
+          <h3 class="text-sm font-bold mb-1">ماذا يفتح لك اشتراك <span dir="ltr">MQ downloader VIP</span>؟</h3>
+          <ul class="space-y-2.5 text-xs">
+            <li class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 font-bold">✓</span>
+              <span><strong>تحميل المقاطع والصور بأعلى دقة (1080p / 4K / أصلية)</strong> بدون ضغط</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 font-bold">✓</span>
+              <span><strong>تحميل المقاطع الطويلة (أكثر من 7 دقائق)</strong> بدون أي قيود على المدة</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 font-bold">✓</span>
+              <span><strong>ترجمة تلقائية بالذكاء الاصطناعي</strong> مدمجة بالفيديو</span>
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">✓</span>
+              <span><strong>ملاحظة:</strong> التحميل العادي (حتى 7 دقائق) مفتوح للجميع مجاناً بدون حد يومي</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- بطاقات الخطط التفاعلية (شهري 100 نجمة | ربع سنوي 250 نجمة) -->
         <div class="grid grid-cols-2 gap-3" id="vipPlans">
+          <!-- الخطة الشهرية -->
           <button
             type="button"
             data-plan="monthly"
@@ -487,9 +648,10 @@
               <span class="text-2xl font-extrabold text-tg-text">100</span>
               <span class="text-xs font-bold text-amber-400">نجمة ⭐</span>
             </div>
-            <p class="text-[11px] text-tg-hint mt-1.5">لمدة 30 يوماً</p>
+            <p class="text-[11px] text-tg-hint mt-1.5">لمدة 30 يوماً • تجديد مرن</p>
           </button>
 
+          <!-- الخطة ربع السنوية -->
           <button
             type="button"
             data-plan="quarterly"
@@ -508,6 +670,7 @@
           </button>
         </div>
 
+        <!-- زر إرسال طلب الاشتراك بنجوم تليجرام -->
         <button
           type="button"
           onclick="subscribeWithStars()"
@@ -516,10 +679,18 @@
           <span>الاشتراك الآن عبر نجوم تليجرام</span>
           <span class="text-base">⭐</span>
         </button>
+
+        <p class="text-[11px] text-center text-tg-hint leading-relaxed">
+          يتم الدفع داخل تليجرام عبر <strong>Telegram Stars</strong> بشكل آمن وفوري.
+        </p>
       </section>
 
-      <!-- التبويب 4: الاستضافة -->
+      <!-- ======================================================= -->
+      <!-- التبويب 4: الاستضافة المجانية ومساعد رفع GitHub (Hosting) -->
+      <!-- ======================================================= -->
       <section id="tab-hosting" class="tab-panel hidden space-y-4">
+
+        <!-- ترويسة بوابة الاستضافة المجانية -->
         <div class="rounded-2xl bg-gradient-to-br from-emerald-500/20 via-sky-500/10 to-tg-card border border-emerald-400/30 p-4 space-y-1.5">
           <div class="flex items-center justify-between gap-2">
             <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[11px] font-extrabold">
@@ -529,36 +700,57 @@
           </div>
           <h2 class="text-base font-extrabold text-tg-text">مساعد الاستضافة المجانية ورفع <span dir="ltr">GitHub</span></h2>
           <p class="text-xs text-tg-hint leading-relaxed">
-            نزّل أو انسخ الكود، وانسخ ملف النشر التلقائي وافحص الرابط قبل ربطه ببوتك في تليجرام.
+            خطوات عملية سريعة من الجوال لرفع تطبيق <strong>MQ downloader</strong> مجاناً والحصول على رابط آمن جاهز لربطه ببوتك في تليجرام.
           </p>
         </div>
 
+        <!-- 1) تصدير ملف index.html (نسخ الكود أو تنزيل الملف مباشرة) -->
         <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3 shadow-sm">
           <div class="flex items-center justify-between gap-2">
-            <h3 class="text-sm font-bold">تصدير ملف <span dir="ltr" class="text-sky-400">index.html</span></h3>
+            <h3 class="text-sm font-bold flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 text-xs font-extrabold flex items-center justify-center">1</span>
+              تصدير ملف <span dir="ltr" class="text-sky-400">index.html</span>
+            </h3>
             <span id="sourceFileSizeBadge" class="text-[11px] font-semibold text-tg-hint" dir="ltr">HTML Single File</span>
           </div>
-          <div class="grid grid-cols-2 gap-2.5">
+          <p class="text-xs text-tg-hint leading-relaxed">
+            نزّل ملف <code dir="ltr" class="px-1.5 py-0.5 rounded bg-tg-bg text-sky-400">index.html</code> مباشرة على هاتفك أو انسخ كامل الكود لوضعه في مستودع GitHub.
+          </p>
+          <div class="grid grid-cols-2 gap-2.5 pt-1">
             <button
               type="button"
               onclick="downloadStandaloneIndexHtml()"
-              class="py-3 px-3 rounded-xl bg-tg-btn text-tg-btnText font-extrabold text-xs shadow-md hover:brightness-110 transition active:scale-95"
+              class="py-3 px-3 rounded-xl bg-tg-btn text-tg-btnText font-extrabold text-xs shadow-md hover:brightness-110 transition active:scale-95 flex items-center justify-center gap-1.5"
             >
-              تنزيل index.html
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>تنزيل index.html</span>
             </button>
+
             <button
               type="button"
               onclick="copyStandaloneSource()"
-              class="py-3 px-3 rounded-xl bg-tg-bg border border-tg-border text-tg-text font-bold text-xs hover:border-sky-500/50 transition active:scale-95"
+              class="py-3 px-3 rounded-xl bg-tg-bg border border-tg-border text-tg-text font-bold text-xs hover:border-sky-500/50 transition active:scale-95 flex items-center justify-center gap-1.5"
             >
-              نسخ كود الصفحة
+              <svg class="w-4 h-4 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>نسخ كود الصفحة</span>
             </button>
           </div>
         </div>
 
+        <!-- 2) ملف النشر التلقائي على GitHub Pages (.github/workflows/deploy.yml) -->
         <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3 shadow-sm">
           <div class="flex items-center justify-between gap-2">
-            <h3 class="text-sm font-bold">نشر تلقائي عبر <span dir="ltr" class="text-indigo-400">GitHub Actions</span></h3>
+            <h3 class="text-sm font-bold flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 text-xs font-extrabold flex items-center justify-center">2</span>
+              نشر تلقائي عبر <span dir="ltr" class="text-indigo-400">GitHub Actions</span>
+            </h3>
             <button
               type="button"
               onclick="copyDeployWorkflow()"
@@ -567,6 +759,9 @@
               نسخ workflow
             </button>
           </div>
+          <p class="text-xs text-tg-hint leading-relaxed">
+            أنشئ في مستودعك المسار <code dir="ltr" class="px-1.5 py-0.5 rounded bg-tg-bg text-indigo-300">.github/workflows/deploy.yml</code> والصق الكود التالي لنشر <span dir="ltr">index.html</span> تلقائياً على <strong>GitHub Pages</strong> مع كل تعديل:
+          </p>
           <pre id="githubWorkflowCode" dir="ltr" class="text-[11px] leading-relaxed text-emerald-300 bg-slate-950/90 p-3 rounded-xl overflow-x-auto border border-tg-border/70 select-all">name: Deploy MQ downloader to GitHub Pages
 
 on:
@@ -603,13 +798,22 @@ jobs:
         uses: actions/deploy-pages@v4</pre>
         </div>
 
+        <!-- 3) أداة التحقق من رابط HTTPS قبل لصقه في @BotFather -->
         <div class="rounded-2xl bg-tg-card border border-tg-border p-4 space-y-3 shadow-sm">
-          <h3 class="text-sm font-bold">فحص الرابط قبل إرساله لـ <span dir="ltr" class="text-emerald-400">@BotFather</span></h3>
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-bold flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-extrabold flex items-center justify-center">3</span>
+              فحص الرابط قبل إرساله لـ <span dir="ltr" class="text-emerald-400">@BotFather</span>
+            </h3>
+          </div>
+          <p class="text-xs text-tg-hint leading-relaxed">
+            بعد نشر الموقع، الصق رابطك هنا للتحقق من أنه يبدأ بـ <code dir="ltr" class="text-emerald-400">https://</code> وصالح للاستخدام كميني أب في تليجرام، ثم انسخ أمر <code dir="ltr" class="text-sky-400">/newapp</code> أو خطوات <code dir="ltr" class="text-sky-400">Menu Button</code>:
+          </p>
+
           <div class="flex items-center gap-2">
             <input
               id="hostingUrlVerifyInput"
-              type="text"
-              inputmode="url"
+              type="url"
               dir="ltr"
               placeholder="https://username.github.io/mq-downloader/"
               oninput="verifyMiniAppUrl()"
@@ -623,38 +827,102 @@ jobs:
               فحص
             </button>
           </div>
+
+          <!-- نتيجة التحقق من الرابط -->
           <div id="urlVerifyResult" class="hidden rounded-xl p-3 text-xs leading-relaxed border"></div>
-          <button
-            type="button"
-            onclick="copyBotFatherGuide()"
-            class="w-full py-2.5 rounded-xl bg-tg-bg border border-tg-border text-xs font-bold text-sky-400 hover:border-sky-500/50 transition active:scale-95"
-          >
-            نسخ ملخص خطوات الربط مع BotFather
-          </button>
+
+          <!-- دليل سريع لربط الرابط في @BotFather -->
+          <div class="rounded-xl bg-tg-bg/75 border border-tg-border/80 p-3 space-y-2 text-xs">
+            <div class="font-bold text-tg-text">الربط في <span dir="ltr">@BotFather</span>:</div>
+            <ol class="list-decimal list-inside space-y-1 text-tg-hint leading-relaxed">
+              <li>افتح <strong dir="ltr">@BotFather</strong> وأرسل <code dir="ltr" class="text-sky-400">/mybots</code> ثم اختر بوتك.</li>
+              <li>اختر <strong>Bot Settings</strong> ← <strong>Menu Button</strong> ← <strong>Configure menu button</strong>.</li>
+              <li>الصق رابط الـ <code dir="ltr" class="text-emerald-400">https://</code> ثم اكتب اسم الزر <strong dir="ltr">MQ downloader</strong>.</li>
+            </ol>
+            <button
+              type="button"
+              onclick="copyBotFatherGuide()"
+              class="w-full mt-1 py-2 rounded-lg bg-tg-card border border-tg-border text-xs font-bold text-sky-400 hover:border-sky-500/50 transition active:scale-95"
+            >
+              نسخ ملخص خطوات الربط مع BotFather
+            </button>
+          </div>
         </div>
+
       </section>
     </main>
 
-    <!-- شريط التنقل السفلي -->
+    <!-- ========================================================= -->
+    <!-- شريط التنقل السفلي (التحميل | السجل | VIP ⭐ | الاستضافة)   -->
+    <!-- ========================================================= -->
     <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-30 backdrop-blur-xl bg-tg-bg/92 border-t border-tg-border px-2 pt-2 pb-3 sm:rounded-b-[30px]">
       <div class="grid grid-cols-4 gap-1">
-        <button type="button" data-nav="download" onclick="switchTab('download')" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-sky-400 bg-sky-500/10 transition active:scale-95">
+        <!-- تبويب التحميل -->
+        <button
+          type="button"
+          data-nav="download"
+          onclick="switchTab('download')"
+          class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-sky-400 bg-sky-500/10 transition active:scale-95"
+        >
+          <svg class="w-5 h-5 mb-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
           <span class="text-[10px] font-bold">التحميل</span>
         </button>
-        <button type="button" data-nav="history" onclick="switchTab('history')" class="nav-btn relative flex flex-col items-center justify-center py-1.5 rounded-xl text-tg-hint hover:text-tg-text transition active:scale-95">
-          <span id="historyBadgeCount" class="hidden absolute top-0.5 left-3 min-w-[16px] h-4 px-1 rounded-full bg-sky-500 text-white text-[9px] font-extrabold flex items-center justify-center">0</span>
+
+        <!-- تبويب السجل -->
+        <button
+          type="button"
+          data-nav="history"
+          onclick="switchTab('history')"
+          class="nav-btn relative flex flex-col items-center justify-center py-1.5 rounded-xl text-tg-hint hover:text-tg-text transition active:scale-95"
+        >
+          <div class="relative">
+            <svg class="w-5 h-5 mb-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span id="historyBadgeCount" class="hidden absolute -top-1.5 -left-2.5 min-w-[16px] h-4 px-1 rounded-full bg-sky-500 text-white text-[9px] font-extrabold flex items-center justify-center">0</span>
+          </div>
           <span class="text-[10px] font-bold">السجل</span>
         </button>
-        <button type="button" data-nav="vip" onclick="switchTab('vip')" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-tg-hint hover:text-tg-text transition active:scale-95">
+
+        <!-- تبويب VIP ⭐ -->
+        <button
+          type="button"
+          data-nav="vip"
+          onclick="switchTab('vip')"
+          class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-tg-hint hover:text-tg-text transition active:scale-95"
+        >
+          <svg class="w-5 h-5 mb-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
           <span class="text-[10px] font-bold">VIP ⭐</span>
         </button>
-        <button type="button" data-nav="hosting" onclick="switchTab('hosting')" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-tg-hint hover:text-tg-text transition active:scale-95">
+
+        <!-- تبويب الاستضافة المجانية -->
+        <button
+          type="button"
+          data-nav="hosting"
+          onclick="switchTab('hosting')"
+          class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-tg-hint hover:text-tg-text transition active:scale-95"
+        >
+          <svg class="w-5 h-5 mb-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="13" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="7" x2="6.01" y2="7"></line>
+            <line x1="6" y1="17" x2="6.01" y2="17"></line>
+          </svg>
           <span class="text-[10px] font-bold">الاستضافة</span>
         </button>
       </div>
     </nav>
 
-    <!-- نافذة حوارية مخصصة -->
+    <!-- ========================================================= -->
+    <!-- نافذة حوارية مخصصة (Modal) لباقة VIP وتأكيد مسح السجل     -->
+    <!-- ========================================================= -->
     <div id="customModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
       <div class="w-full max-w-[420px] rounded-3xl bg-tg-card border border-tg-border p-5 shadow-2xl space-y-4 tab-panel">
         <div class="flex items-start justify-between gap-3">
@@ -673,21 +941,28 @@ jobs:
 
   </div>
 
+  <!-- ========================================================= -->
+  <!-- منطق التطبيق والتكامل مع Telegram WebApp SDK              -->
+  <!-- ========================================================= -->
   <script>
+    /**
+     * إعدادات MQ downloader المركزية
+     * - عند ترك BACKEND_API_URL فارغاً سيعمل التطبيق عبر tg.sendData() داخل تليجرام
+     *   أو بوضع المعاينة التفاعلية داخل المتصفح العادي.
+     */
     const CONFIG = {
       APP_NAME: "MQ downloader",
       BACKEND_API_URL: "",
-      DAILY_FREE_LIMIT: 5,
+      FREE_MAX_DURATION_MINUTES: 7,
       STORAGE_KEYS: {
         HISTORY: "mq_downloader_history_v1",
-        QUOTA: "mq_downloader_quota_v1",
         VIP_DEMO: "mq_downloader_vip_demo_v1",
         THEME: "mq_downloader_theme_v1",
       },
       FORMATS: {
-        "1080p": "جودة عالية (1080p HD)",
+        standard: "جودة قياسية 720p (مجاني)",
+        high_res_vip: "دقة عالية 1080p/4K وصور أصلية (VIP ⭐)",
         vertical_9_16: "تجميل وتحويل طولي (9:16)",
-        compress: "ضغط الحجم (واتساب وتليجرام)",
         mp3: "استخراج الصوت فقط (MP3)",
       },
       PLANS: {
@@ -696,6 +971,7 @@ jobs:
       },
     };
 
+    // أنماط التعرف التلقائي على المنصات المدعومة
     const PLATFORMS = {
       x: {
         name: "منصة X",
@@ -729,121 +1005,21 @@ jobs:
       },
     };
 
+    // الحالة الداخلية للتطبيق
     const state = {
       tg: null,
       inTelegram: false,
       activeTab: "download",
-      selectedFormat: "1080p",
+      selectedFormat: "standard",
       selectedVipPlan: "quarterly",
       detectedPlatform: null,
       isProcessing: false,
       isVip: false,
       lastPayload: null,
-      isDark: true,
     };
 
     /* ============================================================
-     * تهيئة التطبيق وتليجرام والمظهر والاهتزاز
-     * ============================================================ */
-    function initApp() {
-      initTelegramWebApp();
-      initTheme();
-      loadVipStatus();
-      updateQuotaUI();
-      updateHistoryBadge(getHistory().length);
-      updateSourceSizeBadge();
-      bindInputListeners();
-    }
-
-    function initTelegramWebApp() {
-      const tg = window.Telegram?.WebApp;
-      if (tg && (tg.initData || tg.initDataUnsafe?.user || tg.platform !== "unknown")) {
-        state.tg = tg;
-        state.inTelegram = Boolean(tg.initData || tg.initDataUnsafe?.user);
-        try {
-          tg.ready();
-          tg.expand();
-          if (typeof tg.setHeaderColor === "function") {
-            tg.setHeaderColor("secondary_bg_color");
-          }
-          if (typeof tg.setBackgroundColor === "function") {
-            tg.setBackgroundColor("bg_color");
-          }
-        } catch (err) {
-          console.warn("Telegram WebApp init warning:", err);
-        }
-
-        const firstName = tg.initDataUnsafe?.user?.first_name;
-        if (firstName) {
-          const greetingEl = document.getElementById("userGreeting");
-          if (greetingEl) {
-            greetingEl.textContent = `أهلاً ${firstName} في MQ downloader 👋`;
-          }
-        }
-      }
-    }
-
-    function initTheme() {
-      const saved = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
-      if (saved === "light") {
-        setTheme(false, false);
-      } else if (saved === "dark") {
-        setTheme(true, false);
-      } else if (window.Telegram?.WebApp?.colorScheme === "light") {
-        setTheme(false, false);
-      } else {
-        setTheme(true, false);
-      }
-    }
-
-    function toggleTheme() {
-      safeHaptic("light");
-      setTheme(!state.isDark, true);
-    }
-
-    function setTheme(dark, persist) {
-      state.isDark = Boolean(dark);
-      const html = document.documentElement;
-      html.classList.toggle("dark", state.isDark);
-      html.classList.toggle("dark-theme", state.isDark);
-      html.classList.toggle("light-theme", !state.isDark);
-
-      const sunIcon = document.getElementById("sunIcon");
-      const moonIcon = document.getElementById("moonIcon");
-      if (sunIcon && moonIcon) {
-        sunIcon.classList.toggle("hidden", !state.isDark);
-        moonIcon.classList.toggle("hidden", state.isDark);
-      }
-
-      if (persist) {
-        localStorage.setItem(CONFIG.STORAGE_KEYS.THEME, state.isDark ? "dark" : "light");
-      }
-    }
-
-    function safeHaptic(style = "light") {
-      try {
-        state.tg?.HapticFeedback?.impactOccurred?.(style);
-      } catch (_) {}
-    }
-
-    function safeHapticNotification(type = "success") {
-      try {
-        state.tg?.HapticFeedback?.notificationOccurred?.(type);
-      } catch (_) {}
-    }
-
-    function normalizeUrlInput(raw) {
-      const trimmed = (raw || "").trim();
-      if (!trimmed) return "";
-      if (/^https?:\/\//i.test(trimmed)) return trimmed;
-      if (/^[a-z0-9-]+(\.[a-z0-9-]+)+/i.test(trimmed)) {
-        return "https://" + trimmed;
-      }
-      return trimmed;
-    }
-
-    /* ============================================================
-     * التنقل بين التبويبات
+     * التنقل بين التبويبات الأربعة
      * ============================================================ */
     function switchTab(tabName) {
       if (state.activeTab === tabName) return;
@@ -894,13 +1070,15 @@ jobs:
     }
 
     function copyStandaloneSource() {
-      copyTextFallback(getFullStandaloneHtmlSource(), "تم نسخ كامل كود index.html بنجاح");
+      const fullHtml = getFullStandaloneHtmlSource();
+      copyTextFallback(fullHtml, "تم نسخ كامل كود index.html بنجاح");
     }
 
     function downloadStandaloneIndexHtml() {
       safeHaptic("medium");
       try {
-        const blob = new Blob([getFullStandaloneHtmlSource()], { type: "text/html;charset=utf-8" });
+        const fullHtml = getFullStandaloneHtmlSource();
+        const blob = new Blob([fullHtml], { type: "text/html;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -926,7 +1104,7 @@ jobs:
       const box = document.getElementById("urlVerifyResult");
       if (!input || !box) return false;
 
-      const raw = normalizeUrlInput(input.value);
+      const raw = input.value.trim();
       if (!raw) {
         box.classList.add("hidden");
         return false;
@@ -940,14 +1118,14 @@ jobs:
         parsed = new URL(raw);
       } catch (_) {
         box.classList.add("bg-rose-500/10", "border-rose-500/30", "text-rose-300");
-        box.innerHTML = '<strong>صيغة الرابط غير صحيحة:</strong> تأكد من كتابة رابط كامل مثل <code dir="ltr">https://username.github.io/mq-downloader/</code>.';
+        box.innerHTML = "<strong>صيغة الرابط غير صحيحة:</strong> تأكد من كتابة رابط كامل مثل <code dir=\"ltr\">https://username.github.io/mq-downloader/</code>.";
         if (showToastFeedback) showToast("صيغة الرابط غير صحيحة", "error");
         return false;
       }
 
       if (parsed.protocol !== "https:") {
         box.classList.add("bg-amber-500/10", "border-amber-500/30", "text-amber-300");
-        box.innerHTML = `<strong>تنبيه أمان تليجرام:</strong> الرابط يستخدم <code dir="ltr">${escapeHtml(parsed.protocol)}</code>. يشترط تليجرام أن يبدأ رابط الميني أب بـ <strong dir="ltr">https://</strong>.`;
+        box.innerHTML = `<strong>تنبيه أمان تليجرام:</strong> الرابط يستخدم <code dir="ltr">${escapeHtml(parsed.protocol)}</code>. يشترط تليجرام أن يبدأ رابط الميني أب بـ <strong dir="ltr">https://</strong> (مثل GitHub Pages أو Netlify أو Vercel).`;
         if (showToastFeedback) showToast("يجب أن يبدأ الرابط بـ https://", "warning");
         return false;
       }
@@ -966,7 +1144,7 @@ jobs:
     }
 
     function copyBotFatherGuide() {
-      const customUrl = normalizeUrlInput(document.getElementById("hostingUrlVerifyInput")?.value) || "https://YOUR_USERNAME.github.io/mq-downloader/";
+      const customUrl = document.getElementById("hostingUrlVerifyInput")?.value.trim() || "https://YOUR_USERNAME.github.io/mq-downloader/";
       const summary = [
         "خطوات ربط MQ downloader في @BotFather:",
         "1. أرسل /mybots إلى @BotFather واختر البوت.",
@@ -982,7 +1160,7 @@ jobs:
      * ============================================================ */
     function bindInputListeners() {
       const input = document.getElementById("videoUrlInput");
-      input?.addEventListener("input", () => {
+      input.addEventListener("input", () => {
         detectPlatformFromUrl(input.value.trim());
       });
     }
@@ -990,7 +1168,7 @@ jobs:
     function detectPlatformFromUrl(url) {
       const clearBtn = document.getElementById("clearUrlBtn");
       const label = document.getElementById("detectedPlatformLabel");
-      clearBtn?.classList.toggle("hidden", !url);
+      clearBtn.classList.toggle("hidden", !url);
 
       let matchedKey = null;
       for (const [key, info] of Object.entries(PLATFORMS)) {
@@ -1013,7 +1191,6 @@ jobs:
         }
       });
 
-      if (!label) return;
       if (!url) {
         label.textContent = "بانتظار لصق الرابط...";
         label.className = "text-[11px] font-semibold text-tg-hint";
@@ -1039,10 +1216,10 @@ jobs:
             return;
           }
         }
-        input?.focus();
+        input.focus();
         showToast("اضغط مطولاً داخل خانة الرابط ثم اختر لصق", "info");
       } catch (_) {
-        input?.focus();
+        input.focus();
         showToast("اضغط مطولاً داخل خانة الرابط للصق", "info");
       }
     }
@@ -1050,7 +1227,6 @@ jobs:
     function clearUrl() {
       safeHaptic("light");
       const input = document.getElementById("videoUrlInput");
-      if (!input) return;
       input.value = "";
       detectPlatformFromUrl("");
       input.focus();
@@ -1061,7 +1237,6 @@ jobs:
       const sample = PLATFORMS[platformKey]?.sample;
       if (!sample) return;
       const input = document.getElementById("videoUrlInput");
-      if (!input) return;
       input.value = sample;
       detectPlatformFromUrl(sample);
       showToast(`تم إدراج رابط تجريبي لـ ${PLATFORMS[platformKey].name}`, "info");
@@ -1072,16 +1247,35 @@ jobs:
      * ============================================================ */
     function selectFormat(formatKey) {
       safeHaptic("light");
+      if (formatKey === "high_res_vip" && !state.isVip) {
+        safeHapticNotification("warning");
+        showToast("تحميل المقاطع والصور عالية الدقة (1080p/4K) يتطلب اشتراك VIP ⭐", "warning");
+        setTimeout(() => switchTab("vip"), 450);
+        return;
+      }
       state.selectedFormat = formatKey;
       document.querySelectorAll(".format-card").forEach((card) => {
         const isSelected = card.dataset.format === formatKey;
-        card.classList.remove("border-2", "border-sky-500", "bg-sky-500/10", "border", "border-tg-border", "bg-tg-bg/50");
+        card.classList.remove("border-2", "border-sky-500", "bg-sky-500/10", "border-amber-400", "bg-amber-500/10", "border", "border-tg-border", "bg-tg-bg/50");
         if (isSelected) {
-          card.classList.add("border-2", "border-sky-500", "bg-sky-500/10");
+          if (formatKey === "high_res_vip") {
+            card.classList.add("border-2", "border-amber-400", "bg-amber-500/10");
+          } else {
+            card.classList.add("border-2", "border-sky-500", "bg-sky-500/10");
+          }
         } else {
           card.classList.add("border", "border-tg-border", "bg-tg-bg/50");
         }
       });
+    }
+
+    function handleLongVideoVipToggle(checkbox) {
+      safeHaptic("light");
+      if (checkbox.checked && !state.isVip) {
+        checkbox.checked = false;
+        showToast("تحميل المقاطع الأطول من 7 دقائق يتطلب اشتراك VIP ⭐", "warning");
+        setTimeout(() => switchTab("vip"), 450);
+      }
     }
 
     function handleVipToggle(checkbox) {
@@ -1094,79 +1288,47 @@ jobs:
     }
 
     /* ============================================================
-     * الحصة اليومية المجانية
+     * حالة الباقة (التحميل مفتوح للجميع مجاناً + قيود الدقة والمدة)
      * ============================================================ */
-    function getTodayKey() {
-      return new Date().toISOString().slice(0, 10);
-    }
-
-    function getQuotaData() {
-      try {
-        const raw = localStorage.getItem(CONFIG.STORAGE_KEYS.QUOTA);
-        const parsed = raw ? JSON.parse(raw) : null;
-        if (parsed && parsed.date === getTodayKey()) return parsed;
-      } catch (_) {}
-      return { date: getTodayKey(), used: 0 };
-    }
-
-    function incrementQuotaUsage() {
-      if (state.isVip) return;
-      const data = getQuotaData();
-      data.used = Math.min(CONFIG.DAILY_FREE_LIMIT, data.used + 1);
-      localStorage.setItem(CONFIG.STORAGE_KEYS.QUOTA, JSON.stringify(data));
-      updateQuotaUI();
-    }
-
     function updateQuotaUI() {
       const pillText = document.getElementById("quotaText");
       const pillDot = document.getElementById("quotaDot");
-      if (!pillText || !pillDot) return;
-
       if (state.isVip) {
-        pillText.textContent = "VIP غير محدود ⭐";
+        pillText.textContent = "VIP • دقة عالية +7د ⭐";
         pillDot.className = "w-2 h-2 rounded-full bg-amber-400";
         return;
       }
-      const remaining = Math.max(0, CONFIG.DAILY_FREE_LIMIT - getQuotaData().used);
-      pillText.textContent = `${remaining}/${CONFIG.DAILY_FREE_LIMIT} مجاني اليوم`;
-      pillDot.className = remaining > 1
-        ? "w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
-        : remaining === 1
-          ? "w-2 h-2 rounded-full bg-amber-400"
-          : "w-2 h-2 rounded-full bg-rose-500";
+      pillText.textContent = "مجاني بدون حد";
+      pillDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
     }
 
     /* ============================================================
-     * بدء المعالجة والتحميل
+     * بدء المعالجة والتحميل وإرسال JSON إلى البوت
      * ============================================================ */
     async function startProcessing() {
       if (state.isProcessing) return;
       safeHaptic("medium");
 
-      const input = document.getElementById("videoUrlInput");
-      const url = normalizeUrlInput(input?.value);
+      const url = document.getElementById("videoUrlInput").value.trim();
 
       if (!url) {
         safeHapticNotification("error");
         showToast("يرجى لصق رابط المقطع أولاً أو تجربة أحد الروابط الجاهزة", "error");
-        input?.focus();
+        document.getElementById("videoUrlInput").focus();
         return;
       }
 
-      if (!/^https?:\/\/[a-z0-9-]+(\.[a-z0-9-]+)+/i.test(url)) {
+      if (!/^https?:\/\/.+\..+/i.test(url)) {
         safeHapticNotification("error");
-        showToast("الرابط غير صالح، تأكد من إدخال رابط موقع صحيح", "error");
+        showToast("الرابط غير صالح، تأكد أنه يبدأ بـ https://", "error");
         return;
       }
 
-      if (input) {
-        input.value = url;
-        detectPlatformFromUrl(url);
-      }
+      const allowOver7Min = !!document.getElementById("optLongVideo")?.checked && state.isVip;
 
-      if (!state.isVip && getQuotaData().used >= CONFIG.DAILY_FREE_LIMIT) {
+      if (!state.isVip && state.selectedFormat === "high_res_vip") {
         safeHapticNotification("warning");
-        showToast("انتهت حصتك المجانية اليوم (5/5). اشترك في MQ downloader VIP للتحميل اللامحدود!", "warning");
+        showToast("تحميل المقاطع والصور عالية الدقة يتطلب اشتراك VIP ⭐", "warning");
         switchTab("vip");
         return;
       }
@@ -1177,9 +1339,15 @@ jobs:
         url,
         platform: state.detectedPlatform || "other",
         format: state.selectedFormat,
+        tier: state.isVip ? "vip" : "free_unlimited",
+        limits: {
+          maxDurationMinutes: state.isVip ? null : CONFIG.FREE_MAX_DURATION_MINUTES,
+          allowOver7Minutes: allowOver7Min,
+          highResolutionMedia: state.isVip && state.selectedFormat === "high_res_vip",
+        },
         options: {
-          removeWatermark: Boolean(document.getElementById("optRemoveWatermark")?.checked),
-          aiCaptions: Boolean(document.getElementById("optAiCaptions")?.checked && state.isVip),
+          removeWatermark: document.getElementById("optRemoveWatermark").checked,
+          aiCaptions: document.getElementById("optAiCaptions").checked && state.isVip,
         },
         timestamp: new Date().toISOString(),
       };
@@ -1210,7 +1378,7 @@ jobs:
       try {
         for (const step of steps) {
           updateProgressUI(step.pct, step.text);
-          await sleep(350);
+          await sleep(400);
         }
 
         let deliveryMsg = "وضع المعاينة في المتصفح: عند فتح التطبيق داخل تليجرام سيتم إرسال الطلب تلقائياً عبر Telegram WebApp إلى MQ downloader.";
@@ -1233,7 +1401,6 @@ jobs:
         }
 
         saveToHistory(payload);
-        incrementQuotaUsage();
 
         spinner.classList.add("hidden");
         document.getElementById("statusTitle").textContent = "اكتمل تجهيز الطلب ✓";
@@ -1274,7 +1441,7 @@ jobs:
     }
 
     /* ============================================================
-     * إدارة السجل المحلي
+     * إدارة السجل المحلي (localStorage History)
      * ============================================================ */
     function getHistory() {
       try {
@@ -1301,7 +1468,6 @@ jobs:
 
     function updateHistoryBadge(count) {
       const badge = document.getElementById("historyBadgeCount");
-      if (!badge) return;
       if (count > 0) {
         badge.textContent = count > 9 ? "9+" : String(count);
         badge.classList.remove("hidden");
@@ -1389,10 +1555,10 @@ jobs:
       const input = document.getElementById("videoUrlInput");
       input.value = item.url;
       detectPlatformFromUrl(item.url);
-      selectFormat(item.format || "1080p");
+      selectFormat((item.format === "high_res_vip" && !state.isVip) ? "standard" : (item.format || "standard"));
 
-      document.getElementById("optRemoveWatermark").checked = Boolean(item.options?.removeWatermark);
-      document.getElementById("optAiCaptions").checked = Boolean(item.options?.aiCaptions && state.isVip);
+      document.getElementById("optRemoveWatermark").checked = !!item.options?.removeWatermark;
+      document.getElementById("optAiCaptions").checked = !!item.options?.aiCaptions && state.isVip;
 
       switchTab("download");
       showToast("تم استرجاع الرابط وإعداداته", "info");
@@ -1431,7 +1597,7 @@ jobs:
     }
 
     /* ============================================================
-     * باقة VIP والدفع بنجوم تليجرام
+     * باقة VIP والدفع بنجوم تليجرام (Telegram Stars ⭐)
      * ============================================================ */
     function loadVipStatus() {
       state.isVip = localStorage.getItem(CONFIG.STORAGE_KEYS.VIP_DEMO) === "true";
@@ -1439,7 +1605,7 @@ jobs:
     }
 
     function syncVipUI() {
-      document.getElementById("vipActiveBanner")?.classList.toggle("hidden", !state.isVip);
+      document.getElementById("vipActiveBanner").classList.toggle("hidden", !state.isVip);
       updateQuotaUI();
     }
 
@@ -1468,6 +1634,7 @@ jobs:
         timestamp: new Date().toISOString(),
       };
 
+      // عند التشغيل داخل تليجرام عبر زر web_app يتم تمرير طلب الاشتراك للبوت مباشرة
       if (state.inTelegram && typeof state.tg?.sendData === "function") {
         try {
           state.tg.sendData(JSON.stringify(vipPayload));
@@ -1477,6 +1644,7 @@ jobs:
         }
       }
 
+      // نافذة معاينة أنيقة خارج تليجرام أو في وضع الاختبار
       openModal({
         emoji: "⭐",
         title: `MQ downloader VIP — ${plan.label}`,
@@ -1507,14 +1675,18 @@ jobs:
       safeHaptic("light");
       state.isVip = false;
       localStorage.removeItem(CONFIG.STORAGE_KEYS.VIP_DEMO);
-      const aiCheck = document.getElementById("optAiCaptions");
-      if (aiCheck) aiCheck.checked = false;
+      document.getElementById("optAiCaptions").checked = false;
+      const longVidCb = document.getElementById("optLongVideo");
+      if (longVidCb) longVidCb.checked = false;
+      if (state.selectedFormat === "high_res_vip") {
+        selectFormat("standard");
+      }
       syncVipUI();
-      showToast("تم العودة للباقة المجانية", "info");
+      showToast("تم العودة للباقة المجانية (مفتوحة بدون حد حتى 7 دقائق)", "info");
     }
 
     /* ============================================================
-     * أدوات مساعدة
+     * أدوات مساعدة: الإشعارات، النافذة الحوارية، النسخ، والتنسيق
      * ============================================================ */
     function showToast(message, type = "info") {
       const container = document.getElementById("toastContainer");
@@ -1562,6 +1734,7 @@ jobs:
       document.getElementById("customModal").classList.add("hidden");
     }
 
+    // نسخ النص عبر execCommand لضمان العمل داخل iFrame وتليجرام
     function copyTextFallback(text, successMsg) {
       safeHaptic("light");
       try {
@@ -1603,7 +1776,69 @@ jobs:
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
+    function safeHaptic(style = "light") {
+      try {
+        state.tg?.HapticFeedback?.impactOccurred?.(style);
+      } catch (_) {}
+    }
+
+    function safeHapticNotification(type = "success") {
+      try {
+        state.tg?.HapticFeedback?.notificationOccurred?.(type);
+      } catch (_) {}
+    }
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      const sun = document.getElementById("sunIcon");
+      const moon = document.getElementById("moonIcon");
+      if (theme === "light") {
+        root.classList.remove("dark", "dark-theme");
+        root.classList.add("light-theme");
+        sun?.classList.add("hidden");
+        moon?.classList.remove("hidden");
+      } else {
+        root.classList.remove("light-theme");
+        root.classList.add("dark", "dark-theme");
+        sun?.classList.remove("hidden");
+        moon?.classList.add("hidden");
+      }
+      localStorage.setItem(CONFIG.STORAGE_KEYS.THEME, theme);
+    }
+
+    function toggleTheme() {
+      safeHaptic("light");
+      const isLight = document.documentElement.classList.contains("light-theme");
+      applyTheme(isLight ? "dark" : "light");
+    }
+
+    function initApp() {
+      const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+      if (savedTheme === "light" || savedTheme === "dark") {
+        applyTheme(savedTheme);
+      }
+
+      if (window.Telegram && window.Telegram.WebApp) {
+        state.tg = window.Telegram.WebApp;
+        state.inTelegram = true;
+        try {
+          state.tg.ready();
+          state.tg.expand();
+          const user = state.tg.initDataUnsafe?.user;
+          if (user?.first_name) {
+            document.getElementById("userGreeting").textContent = `أهلاً ${user.first_name} 👋`;
+          }
+        } catch (_) {}
+      }
+
+      bindInputListeners();
+      loadVipStatus();
+      updateHistoryBadge(getHistory().length);
+      updateSourceSizeBadge();
+    }
+
     document.addEventListener("DOMContentLoaded", initApp);
   </script>
 </body>
 </html>
+
